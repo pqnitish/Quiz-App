@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+<script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+    // Your  code will go here
+    const { useState } = React;
+    let questionData = [
+        {
+            question: "Which React Hook is used to add state management to functional components?",
+            options: ["useState", "useEffect", "useContext", "useRef"],
+            correctAnswer: "useState"
+        },
+        {
+            question: "Which React Hook is used to perform side effects in functional components?",
+            options: ["useState", "useEffect", "useContext", "useRef"],
+            correctAnswer: "useEffect"
+        },
+        {
+            question: "Which React Hook allows you to subscribe to context changes in functional components?",
+            options: ["useState", "useEffect", "useContext", "useRef"],
+            correctAnswer: "useContext"
+        },
+        {
+            question: "Which React Hook is primarily used for accessing the DOM?",
+            options: ["useState", "useEffect", "useContext", "useRef"],
+            correctAnswer: "useRef"
+        },
+        {
+            question: "Which React Hook is used for optimizing performance by memoizing the value of a function?",
+            options: ["useState", "useEffect", "useMemo", "useRef"],
+            correctAnswer: "useMemo"
+        },
+        {
+            question: "Which React Hook is used to replace lifecycle methods like componentDidMount and componentDidUpdate?",
+            options: ["useState", "useEffect", "useContext", "useRef"],
+            correctAnswer: "useEffect"
+        },
+        {
+            question: "Which React Hook is used to create reusable logic across components without changing their hierarchy?",
+            options: ["useState", "useEffect", "useContext", "useReducer"],
+            correctAnswer: "useReducer"
+        },
+        {
+            question: "Which React Hook is used to store the previous value of a state or props?",
+            options: ["useState", "useEffect", "useContext", "useRef"],
+            correctAnswer: "useRef"
+        },
+        {
+            question: "Which React Hook is used for lazy loading and code splitting?",
+            options: ["useState", "useEffect", "useContext", "useMemo"],
+            correctAnswer: "useMemo"
+        },
+        {
+            question: "Which React Hook is used to control the component's behavior based on the viewport?",
+            options: ["useState", "useEffect", "useContext", "useLayoutEffect"],
+            correctAnswer: "useLayoutEffect"
+        },
+    ];
+    // console.log(questionData.length);
+    const Quiz = () => {
+        const [answers, setAnswers] = useState(Array(questionData.length).fill(''));
+        const [score, setScore] = useState(null);
+
+        const handleAnswerChange = (index, answer) => {
+            const newAnswers = [...answers];
+            newAnswers[index] = answer;
+            setAnswers(newAnswers);
+        };
+
+        const handleSubmit = () => {
+            const calculatedScore = answers.reduce((acc, answer, index) => {
+                return answer === questionData[index].correctAnswer ? acc + 1 : acc;
+            }, 0);
+            setScore(calculatedScore);
+        };
+
+        const handleRestart = () => {
+            setAnswers(Array(questionData.length).fill(''));
+            setScore(null);
+        };
+
+        return (
+            <div>
+                {score !== null ? (
+                    <div>
+                        <h2>Your Score: {score} / {questionData.length}</h2>
+                        <button onClick={handleRestart}>Restart Quiz</button>
+                    </div>
+                ) : (
+                    <div>
+                        {questionData.map((question, index) => (
+                            <div key={index}>
+                                <h3>{question.question}</h3>
+                                <ul>
+                                    {question.options.map((option, optionIndex) => (
+                                        <li key={optionIndex}>
+                                            <label>
+                                                <input
+                                                    type="radio"
+                                                    name={`question-${index}`}
+                                                    value={option}
+                                                    checked={answers[index] === option}
+                                                    onChange={() => handleAnswerChange(index, option)}
+                                                />
+                                                {option}
+                                            </label>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                        <button onClick={() => { handleSubmit() }}>Submit</button>
+                    </div>
+                )}
+            </div>
+        );
+    };
+    let root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<Quiz />)
+</script>
+
+</html>
